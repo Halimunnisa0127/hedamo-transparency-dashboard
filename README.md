@@ -1,8 +1,7 @@
 # hedamo-transparency-dashboard
-“Hedamo Dashboard helps organizations maintain transparency in product composition, certifications, and compliance through AI-driven insights and real-time analytics.”
-# Hedamo Product Transparency Dashboard
+Hedamo Dashboard helps organizations maintain transparency in product composition, certifications, and compliance through AI-driven insights and real-time analytics.built with **Next.js**, **React**, and **Tailwind CSS**.
 
-A comprehensive **Product Transparency and Management System** built with **Next.js**, **React**, and **Tailwind CSS**.
+
 
 ---
 
