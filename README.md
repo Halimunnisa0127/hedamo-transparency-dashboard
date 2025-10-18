@@ -40,8 +40,10 @@ Hedamo Dashboard helps organizations maintain transparency in product compositio
 ---
 
 ## 🖼️ Preview
-![Dashboard Preview](./screenshots/dashboard.png)
-![Product Management](./screenshots/product-management.png)
+![Dashboard Preview](./hedamo-transparency/public/Dashboard.png)
+![Product Management](./hedamo-transparency/public/Products.png)
+![Add Product](./hedamo-transparency/public/Add-Product.png)
+![Product Analytics](./hedamo-transparency/public/Analytics.png)
 
 
 ## Getting Started
