@@ -1,4 +1,5 @@
 {
+    
   "builds": [
     {
       "src": "hedamo-transparency/next.config.js",
