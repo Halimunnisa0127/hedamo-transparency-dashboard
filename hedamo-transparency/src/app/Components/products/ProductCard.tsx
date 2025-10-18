@@ -1,8 +1,9 @@
 // components/products/ProductCard.tsx
 'use client';
 import { motion } from 'framer-motion';
-import { Product } from '@/types';
-import { getScoreColor, getStatusColor } from '@/lib/utils';
+import { Product } from '@/src/types';
+import { getScoreColor, getStatusColor } from '@/src/lib/utils';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 

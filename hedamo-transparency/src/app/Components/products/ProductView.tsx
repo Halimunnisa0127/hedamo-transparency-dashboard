@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Product } from '@/types';
+import { Product } from '@/src/types';
 import ProductTable from './ProductTable';
 import ProductCard from './ProductCard';
 import ProductFilters from './ProductFilters';

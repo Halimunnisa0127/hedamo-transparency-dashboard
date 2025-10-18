@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Product } from '@/types';
+import { Product } from '@/src/types';
 import SearchFilter from './SearchFilter';
 import ActiveFilters from './ActiveFilters';
 import ProductRow from './ProductRow';

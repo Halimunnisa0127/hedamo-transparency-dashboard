@@ -1,6 +1,6 @@
 // app/products/page.tsx
 import ProductView from '../Components/products/ProductView';
-import { mockProducts } from '@/data/mockData';
+import { mockProducts } from '@/src/data/mockData';
 
 export default function ProductsPage() {
   return (

@@ -1,6 +1,7 @@
 // components/forms/ReviewStep.tsx
 import Card, { CardHeader, CardContent } from '../ui/Card';
-import { FormData } from '@/types';
+import { FormData } from '@/src/types';
+
 
 export default function ReviewStep({ data }: { data: FormData }) {
   return (

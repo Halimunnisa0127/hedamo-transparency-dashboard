@@ -1,5 +1,5 @@
 // components/forms/SubmissionResult.tsx
-import { AIResponse } from '@/types';
+import { AIResponse } from '@/src/types';
 import ScoreRadial from '../analytics/ScoreRadial';
 import SuggestionList from '../analytics/SuggestionList';
 import RiskFlags from '../analytics/RiskFlags';
