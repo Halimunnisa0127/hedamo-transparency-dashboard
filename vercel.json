@@ -1,8 +1,7 @@
 {
-    
   "builds": [
     {
-      "src": "hedamo-transparency/next.config.js",
+      "src": "hedamo-transparency/package.json",
       "use": "@vercel/next"
     }
   ],
