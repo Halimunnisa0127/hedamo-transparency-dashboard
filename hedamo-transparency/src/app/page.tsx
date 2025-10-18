@@ -2,7 +2,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { mockProducts } from '@/data/mockData';
+import { mockProducts } from '../data/mockData';
 import ProductTable from './Components/products/ProductTable';
 import Card, { CardHeader, CardContent } from './Components/ui/Card';
 

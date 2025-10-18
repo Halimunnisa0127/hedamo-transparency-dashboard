@@ -7,7 +7,7 @@ import IngredientsStep from './IngredientsStep';
 import CertificationsStep from './CertificationsStep';
 import ReviewStep from './ReviewStep';
 import SubmissionResult from './SubmissionResult';
-import { FormData, AIResponse } from '@/types';
+import { FormData, AIResponse } from '@/src/types';
 import Button from '../ui/Button';
 
 interface Ingredient {

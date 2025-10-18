@@ -1,8 +1,8 @@
 // components/products/ProductRow.tsx
 'use client';
 
-import { Product } from '@/types';
-import { getScoreColor, getStatusColor } from '@/lib/utils';
+import { Product } from '@/src/types';
+import { getScoreColor, getStatusColor }from '@/src/lib/utils';
 import { highlightText } from '../../../utils/search';
 import { useRouter } from 'next/navigation';
 
