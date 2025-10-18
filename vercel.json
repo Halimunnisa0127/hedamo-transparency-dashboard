@@ -1,0 +1,11 @@
+{
+  "builds": [
+    {
+      "src": "hedamo-transparency/next.config.js",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "hedamo-transparency/$1" }
+  ]
+}
