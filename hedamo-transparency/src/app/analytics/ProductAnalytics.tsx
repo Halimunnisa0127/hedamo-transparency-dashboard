@@ -2,7 +2,7 @@
 
 import { useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { mockProducts } from '@/data/mockData';
+import { mockProducts } from '@/src/data/mockData';
 import ScoreRadial from '../Components/analytics/ScoreRadial';
 import SuggestionList from '../Components/analytics/SuggestionList';
 import RiskFlags from '../Components/analytics/RiskFlags';
