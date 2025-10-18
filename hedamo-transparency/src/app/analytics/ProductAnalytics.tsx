@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { mockProducts } from '@/data/mockData';
 import ScoreRadial from '../Components/analytics/ScoreRadial';
@@ -8,7 +8,8 @@ import SuggestionList from '../Components/analytics/SuggestionList';
 import RiskFlags from '../Components/analytics/RiskFlags';
 import Card, { CardHeader, CardContent } from '../Components/ui/Card';
 
-export default function ProductAnalytics() {
+// Inner component that uses useSearchParams
+function AnalyticsContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('product');
 
@@ -60,6 +61,26 @@ export default function ProductAnalytics() {
           <RiskFlags flags={product.aiAnalysis.flags} />
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+// Main component with Suspense
+export default function ProductAnalytics() {
+  return (
+    <div className="space-y-6 p-6">
+      <div>
+        <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-600">
+          Product Analytics
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Detailed transparency analysis and insights
+        </p>
+      </div>
+
+      <Suspense fallback={<div className="text-center py-8">Loading analytics...</div>}>
+        <AnalyticsContent />
+      </Suspense>
     </div>
   );
 }
