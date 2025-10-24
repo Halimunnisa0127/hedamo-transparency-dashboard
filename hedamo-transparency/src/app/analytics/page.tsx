@@ -1,3 +1,6 @@
+"use client";
+
+
 import ProductAnalytics from './ProductAnalytics';
 
 export default function AnalyticsPage() {
