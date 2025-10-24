@@ -1,6 +1,5 @@
-// components/products/ProductFilters.tsx
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProductFiltersProps {
@@ -16,11 +15,23 @@ interface ProductFiltersProps {
 
 export default function ProductFilters({ filters, onFiltersChange, categories }: ProductFiltersProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  // Detect client and window width
+  useEffect(() => {
+    setIsClient(true);
+    setWindowWidth(window.innerWidth);
+
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleFilterChange = (key: string, value: any) => {
     onFiltersChange({
       ...filters,
-      [key]: value
+      [key]: value,
     });
   };
 
@@ -29,11 +40,16 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
       search: '',
       status: '',
       category: '',
-      scoreRange: [0, 100]
+      scoreRange: [0, 100],
     });
   };
 
-  const hasActiveFilters = filters.search || filters.status || filters.category || filters.scoreRange[0] > 0 || filters.scoreRange[1] < 100;
+  const hasActiveFilters =
+    filters.search ||
+    filters.status ||
+    filters.category ||
+    filters.scoreRange[0] > 0 ||
+    filters.scoreRange[1] < 100;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
@@ -41,11 +57,8 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Filters</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Refine your product search
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Refine your product search</p>
         </div>
-        
         <div className="flex items-center space-x-3">
           {hasActiveFilters && (
             <button
@@ -55,16 +68,15 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
               Clear All
             </button>
           )}
-          
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="lg:hidden inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
             {isExpanded ? 'Hide Filters' : 'Show Filters'}
-            <svg 
-              className={`ml-2 w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className={`ml-2 w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -91,9 +103,9 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
         </div>
       </div>
 
-      {/* Filters Grid */}
+      {/* Filters Grid (Hydration-safe) */}
       <AnimatePresence>
-        {(isExpanded || (typeof window !== 'undefined' && window.innerWidth >= 1024)) && (
+        {isClient && (isExpanded || windowWidth >= 1024) && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -103,9 +115,7 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
           >
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Status
-              </label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
               <select
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={filters.status}
@@ -120,9 +130,7 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
 
             {/* Category Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Category
-              </label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
               <select
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 value={filters.category}
@@ -150,7 +158,9 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
                   step="5"
                   className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                   value={filters.scoreRange[0]}
-                  onChange={(e) => handleFilterChange('scoreRange', [parseInt(e.target.value), filters.scoreRange[1]])}
+                  onChange={(e) =>
+                    handleFilterChange('scoreRange', [parseInt(e.target.value), filters.scoreRange[1]])
+                  }
                 />
                 <input
                   type="range"
@@ -159,7 +169,9 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
                   step="5"
                   className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
                   value={filters.scoreRange[1]}
-                  onChange={(e) => handleFilterChange('scoreRange', [filters.scoreRange[0], parseInt(e.target.value)])}
+                  onChange={(e) =>
+                    handleFilterChange('scoreRange', [filters.scoreRange[0], parseInt(e.target.value)])
+                  }
                 />
               </div>
               <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -190,7 +202,6 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
               </button>
             </span>
           )}
-          
           {filters.status && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
               Status: {filters.status}
@@ -202,7 +213,6 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
               </button>
             </span>
           )}
-          
           {filters.category && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
               Category: {filters.category}
@@ -214,7 +224,6 @@ export default function ProductFilters({ filters, onFiltersChange, categories }:
               </button>
             </span>
           )}
-          
           {(filters.scoreRange[0] > 0 || filters.scoreRange[1] < 100) && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
               Score: {filters.scoreRange[0]}-{filters.scoreRange[1]}

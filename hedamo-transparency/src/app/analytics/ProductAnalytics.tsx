@@ -69,15 +69,6 @@ function AnalyticsContent() {
 export default function ProductAnalytics() {
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-600">
-          Product Analytics
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Detailed transparency analysis and insights
-        </p>
-      </div>
-
       <Suspense fallback={<div className="text-center py-8">Loading analytics...</div>}>
         <AnalyticsContent />
       </Suspense>

@@ -1,10 +1,10 @@
-// app/page.tsx
 'use client';
 
-import { useMemo } from 'react';
-import { mockProducts } from '../data/mockData';
-import ProductTable from './Components/products/ProductTable';
+import { useState, useEffect, useMemo } from 'react';
+import ProductTable from './Components/productsData/ProductTable';
 import Card, { CardHeader, CardContent } from './Components/ui/Card';
+import { Product } from '@/src/types';
+import { mockProducts } from '../data/mockData'; // Keep mockProducts
 
 // SVG icons
 const PackageIcon = () => (
@@ -26,16 +26,29 @@ const AlertTriangleIcon = () => (
 );
 
 export default function Dashboard() {
-  const averageScore = Math.round(mockProducts.reduce((acc, product) => acc + product.score, 0) / mockProducts.length);
-  const publishedCount = mockProducts.filter(p => p.status === 'published').length;
-  const attentionCount = mockProducts.filter(p => p.status === 'needs_attention').length;
+  const [newProducts, setNewProducts] = useState<Product[]>([]);
 
-  // Get recent 5 products
+  // Load new products from localStorage
+  useEffect(() => {
+    const savedProducts: Product[] = JSON.parse(localStorage.getItem('products') || '[]');
+    setNewProducts(savedProducts);
+  }, []);
+
+  // Combine mock + new products
+  const products = useMemo(() => [...mockProducts, ...newProducts], [newProducts]);
+
+  const averageScore = products.length
+    ? Math.round(products.reduce((acc, p) => acc + p.score, 0) / products.length)
+    : 0;
+
+  const publishedCount = products.filter(p => p.status === 'published').length;
+  const attentionCount = products.filter(p => p.status === 'needs_attention').length;
+
   const recentProducts = useMemo(() => {
-    return [...mockProducts]
+    return [...products]
       .sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime())
       .slice(0, 5);
-  }, []);
+  }, [products]);
 
   return (
     <div className="space-y-6">
@@ -52,7 +65,7 @@ export default function Dashboard() {
             <PackageIcon />
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Products</p>
-              <p className="text-2xl font-semibold text-gray-900 dark:text-white">{mockProducts.length}</p>
+              <p className="text-2xl font-semibold text-gray-900 dark:text-white">{products.length}</p>
             </div>
           </CardContent>
         </Card>
