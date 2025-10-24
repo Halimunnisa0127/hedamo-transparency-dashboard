@@ -1,9 +1,14 @@
-"use client";
-
-
+'use client';
+import { useState, useEffect } from 'react';
 import ProductAnalytics from './ProductAnalytics';
 
 export default function AnalyticsPage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
   return (
     <div className="space-y-6 p-6">
       <div>
@@ -14,7 +19,6 @@ export default function AnalyticsPage() {
           Detailed transparency analysis and insights
         </p>
       </div>
-
       <ProductAnalytics />
     </div>
   );
