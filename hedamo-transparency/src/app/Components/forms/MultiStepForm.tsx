@@ -31,18 +31,41 @@ export default function MultiStepForm() {
   const updateFormData = (stepData: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...stepData }));
   };
+const validateStep = (): boolean => {
+  setError(null);
 
-  const validateStep = (): boolean => {
-    setError(null);
-    // Example: Basic validation for step 0
-    if (currentStep === 0) {
-      const basic = formData.basicInfo;
-      if (!basic?.name?.trim()) { setError('Product name is required.'); return false; }
-      if (!basic?.category?.trim()) { setError('Category is required.'); return false; }
+  if (currentStep === 0) {
+    const basic = formData.basicInfo;
+    if (!basic?.name?.trim()) { setError('Product name is required.'); return false; }
+    if (!basic?.category?.trim()) { setError('Category is required.'); return false; }
+    if (!basic?.description?.trim()) { setError('Description is required.'); return false; }
+  }
+
+  if (currentStep === 1) {
+    const ingredients = formData.ingredients?.items || [];
+    if (ingredients.length === 0) { setError('At least one ingredient is required.'); return false; }
+
+    for (let i = 0; i < ingredients.length; i++) {
+      const ing = ingredients[i];
+      if (!ing.name?.trim()) { setError(`Ingredient ${i + 1}: Name is required.`); return false; }
+      if (ing.percentage === undefined || ing.percentage < 0 || ing.percentage > 100) {
+        setError(`Ingredient ${i + 1}: Percentage must be between 0 and 100.`); return false;
+      }
+      if (!ing.sourcing?.trim()) { setError(`Ingredient ${i + 1}: Sourcing is required.`); return false; }
     }
-    // Add other step validations here
-    return true;
-  };
+  }
+
+  if (currentStep === 2) {
+    // Use the certRef to validate CertificationsStep
+    if (!certRef.current?.validate()) {
+      setError('Please fill out all required certification fields correctly.');
+      return false;
+    }
+  }
+
+  return true;
+};
+
 
   const handleNext = () => {
     if (!validateStep()) return;
@@ -59,42 +82,42 @@ export default function MultiStepForm() {
     setCurrentStep(prev => prev + 1);
   };
 
- const handleSubmit = async () => {
-  if (!validateStep()) return;
+  const handleSubmit = async () => {
+    if (!validateStep()) return;
 
-  const aiAnalysis: AIResponse = {
-    productName: formData.basicInfo?.name || 'Unknown Product',
-    score: Math.floor(Math.random() * 40) + 60,
-    explanation: 'Good baseline transparency. Consider adding more detailed sourcing information.',
-    suggestions: [
-      'Add sourcing details for primary ingredients',
-      'Include certification verification documents',
-      'Specify manufacturing location transparency',
-    ],
-    flags: formData.basicInfo?.name?.toLowerCase().includes('organic')
-      ? ['Unverified organic claim']
-      : [],
-    certifications: formData.certifications?.items || [],
+    const aiAnalysis: AIResponse = {
+      productName: formData.basicInfo?.name || 'Unknown Product',
+      score: Math.floor(Math.random() * 40) + 60,
+      explanation: 'Good baseline transparency. Consider adding more detailed sourcing information.',
+      suggestions: [
+        'Add sourcing details for primary ingredients',
+        'Include certification verification documents',
+        'Specify manufacturing location transparency',
+      ],
+      flags: formData.basicInfo?.name?.toLowerCase().includes('organic')
+        ? ['Unverified organic claim']
+        : [],
+      certifications: formData.certifications?.items || [],
+    };
+
+    const newProduct: Product = {
+      id: Date.now().toString(),
+      name: formData.basicInfo?.name || 'Unknown Product',
+      category: formData.basicInfo?.category || 'Uncategorized',
+      description: formData.basicInfo?.description || '',
+      score: aiAnalysis.score,
+      status: 'published',
+      lastUpdated: new Date().toISOString(),
+      aiAnalysis,
+    };
+
+    // Save to localStorage
+    const existingProducts: Product[] = JSON.parse(localStorage.getItem('products') || '[]');
+    localStorage.setItem('products', JSON.stringify([newProduct, ...existingProducts]));
+
+    // Show AI analysis result
+    setSubmissionResult(aiAnalysis);
   };
-
-  const newProduct: Product = {
-    id: Date.now().toString(),
-    name: formData.basicInfo?.name || 'Unknown Product',
-    category: formData.basicInfo?.category || 'Uncategorized',
-    description: formData.basicInfo?.description || '',
-    score: aiAnalysis.score,
-    status: 'published',
-    lastUpdated: new Date().toISOString(),
-    aiAnalysis,
-  };
-
-  // Save to localStorage
-  const existingProducts: Product[] = JSON.parse(localStorage.getItem('products') || '[]');
-  localStorage.setItem('products', JSON.stringify([newProduct, ...existingProducts]));
-
-  // Show AI analysis result
-  setSubmissionResult(aiAnalysis);
-};
 
   if (submissionResult) {
     return <SubmissionResult result={submissionResult} />;

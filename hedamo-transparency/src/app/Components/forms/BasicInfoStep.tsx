@@ -46,32 +46,6 @@ export default function BasicInfoStep({ data, onChange, errors }: BasicInfoStepP
     onChange({ basicInfo: newData });
   };
 
-  // Validate single field
-  const validateField = (field: string, value: string) => {
-    switch (field) {
-      case 'name':
-        if (!value.trim()) return 'Product name is required';
-        if (!/^[a-zA-Z\s]+$/.test(value))
-          return 'Product name can only contain letters';
-        return '';
-      case 'category':
-        if (!value.trim()) return 'Category is required';
-        return '';
-      case 'description':
-        const wordCount = value.trim().split(/\s+/).length;
-        if (wordCount < 20) return 'Description must be at least 20 words';
-        return '';
-      default:
-        return '';
-    }
-  };
-
-  // Handle blur event to validate field
-  const handleBlur = (field: string, value: string) => {
-    const error = validateField(field, value);
-    setLocalErrors(prev => ({ ...prev, [field]: error }));
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -95,12 +69,12 @@ export default function BasicInfoStep({ data, onChange, errors }: BasicInfoStepP
               type="text"
               required
               className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${localErrors.name
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
                 }`}
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              onBlur={(e) => handleBlur('name', e.target.value)}
+
               placeholder="Enter product name"
             />
             {/* Show error if exists */}
@@ -117,12 +91,12 @@ export default function BasicInfoStep({ data, onChange, errors }: BasicInfoStepP
             <select
               required
               className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${localErrors.category
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
                 }`}
               value={formData.category}
               onChange={(e) => handleChange('category', e.target.value)}
-              onBlur={(e) => handleBlur('category', e.target.value)}
+
             >
               <option value="">Select a category</option>
               <option value="Beverages">Beverages</option>
@@ -145,12 +119,12 @@ export default function BasicInfoStep({ data, onChange, errors }: BasicInfoStepP
             <textarea
               rows={4}
               className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${localErrors.description
-                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500'
                 }`}
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              onBlur={(e) => handleBlur('description', e.target.value)}
+
               placeholder="Describe your product (at least 20 words)..."
             />
             {/* Show error if exists */}
