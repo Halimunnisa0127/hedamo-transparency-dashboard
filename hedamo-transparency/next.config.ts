@@ -1,14 +1,12 @@
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',
   trailingSlash: false,
   images: { unoptimized: true },
   reactStrictMode: true,
   experimental: {
     turbopack: {
-      root: __dirname // ensures Turbopack uses this project folder
+      root: __dirname
     }
   }
 }
